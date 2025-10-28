@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        NETLIFY_SITE_ID = '1ce88090-ed48-4f94-b59f-8caf43e1fa5a'
+        NETLIFY_AUTH_TOKEN = credentials('netlify-token')
+    }
+
     stages {
         /*
         stage('Build') {
@@ -66,21 +71,23 @@ pipeline {
         }
 
         stage('Deploy') {
-                    agent {
-                        docker {
-                            image 'node:18-alpine'
-                            reuseNode true
-                        }
-                    }
-                    
-                    steps {
-                        sh '''
-                            npm install netlify-cli@20.1.1
-                            node_modules/.bin/netlify --version
-                        '''
-                    }
-      
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
                 }
+            }
+            
+            steps {
+                sh '''
+                    npm install netlify-cli@20.1.1
+                    node_modules/.bin/netlify --version
+                    echo "Deploying to production. Site ID:  $NETLIFY_SITE_ID"
+                    node_modules/.bin/netlify status
+                '''
+            }
+
+        }
         
     }
 
