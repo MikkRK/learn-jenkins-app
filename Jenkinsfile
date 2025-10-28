@@ -90,6 +90,22 @@ pipeline {
             }
 
         }
+        stage('Prod E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
+                }
+            }
+            environment {
+                CI_ENVIRONMENT_URL = 'https://gleeful-otter-c5ac25.netlify.app'
+            }
+            steps {
+                sh '''
+                    npx playwright test
+                '''
+            }
+        }
         
     }
 
