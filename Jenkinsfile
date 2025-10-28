@@ -7,7 +7,6 @@ pipeline {
     }
 
     stages {
-        /*
         stage('Build') {
             agent {
                 docker {
@@ -27,7 +26,6 @@ pipeline {
                 '''
             }
         }
-        */
         stage('Start tests'){
             parallel {
                 stage('Unit tests') {
